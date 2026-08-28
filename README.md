@@ -1,271 +1,161 @@
 # CyberHomeLab
 
-A hands-on cybersecurity home lab built progressively to explore **network security, Active Directory, privileged access management, security monitoring, detection, investigation, and incident response**.
+A hands-on cybersecurity home lab built to explore network security, Active Directory, privileged access management, and security monitoring.
 
-The lab is divided into multiple connected projects. Each project adds another layer to the same virtual security environment.
+The lab is developed as a series of connected projects, with each project adding another layer to the same virtual environment.
 
 ---
 
-## Lab Overview
+## Projects
 
-The CyberHomeLab is built progressively:
+### 01 — Virtual Network
+
+The foundation of the lab.
+
+A virtual network security environment focused on network segmentation, firewall configuration, routing, and controlled communication between isolated networks.
+
+**Main technologies:** OPNsense, VirtualBox, Windows, Linux
+
+[View 01 — Virtual Network →](https://github.com/ValentinUdrea/01-virtual-network)
+
+---
+
+### 02 — Active Directory PAM Lab
+
+The identity and access layer of the lab.
+
+A hands-on Active Directory environment focused on users, groups, privileged accounts, service accounts, Group Policy, and least-privilege concepts.
+
+**Main technologies:** Windows Server, Active Directory, Group Policy
+
+[View 02 — Active Directory PAM Lab →](https://github.com/ValentinUdrea/02-active-directory-pam-lab)
+
+---
+
+### 03 — Wazuh SOC Lab
+
+The defensive security layer of the lab.
+
+A SOC environment focused on Windows security telemetry, endpoint monitoring, detection, alert investigation, and incident response using Wazuh.
+
+**Main technologies:** Wazuh, Windows 11, Active Directory, Ubuntu Server
+
+[View 03 — Wazuh SOC Lab →](https://github.com/ValentinUdrea/03-wazuh-soc-lab)
+
+---
+
+## Lab Architecture
 
 ```text
-01 - Virtual Network
-        ↓
-Network Infrastructure & Segmentation
-        ↓
-02 - Active Directory PAM Lab
-        ↓
-Identity & Privileged Access
-        ↓
-03 - Wazuh SOC Lab
-        ↓
-Security Monitoring & Detection
-        ↓
-04 - Adversary Simulation Lab
-        ↓
-Offensive Security & Attack Simulation
-```
-
-The projects are designed to work together rather than being isolated exercises.
-
----
-
-# Projects
-
-## 01 - Virtual Network
-
-**Repository:** `01-virtual-network`
-
-A hands-on virtual network security lab focused on building the underlying network infrastructure.
-
-### Focus
-
-* Virtual machine networking
-* Network segmentation
-* OPNsense firewall
-* LAB-LAN / ATTACK-LAN separation
-* Routing
-* NAT
-* DHCP
-* DNS
-* Firewall rules
-* Traffic control
-
-This project provides the network foundation used by the following CyberHomeLab projects.
-
----
-
-## 02 - Active Directory PAM Lab
-
-**Repository:** `02-active-directory-pam-lab`
-
-A hands-on Active Directory and privileged access management lab focused on identity and access control.
-
-### Focus
-
-* Active Directory
-* Domain Controller
-* Organizational Units
-* Users and groups
-* Administrative accounts
-* Service accounts
-* Group Policy
-* Least privilege
-* Privileged access
-* PAM concepts
-* Windows security auditing
-
-This project builds the identity and Windows environment that is later monitored by the SOC infrastructure.
-
----
-
-## 03 - Wazuh SOC Lab
-
-**Repository:** `03-wazuh-soc-lab`
-
-A hands-on Security Operations Center lab focused on monitoring and investigating security activity within the CyberHomeLab environment.
-
-### Focus
-
-* Wazuh
-* Windows security events
-* Advanced Audit Policy
-* Endpoint monitoring
-* Security event collection
-* Detection
-* Alert investigation
-* SOC workflows
-* Incident response
-* Detection engineering
-
-This project uses the network and Active Directory infrastructure created in Projects 01 and 02.
-
----
-
-# Lab Architecture
-
-```text
-                           CyberHomeLab
-
-                         ┌───────────────┐
-                         │    Kali       │
-                         │ 10.10.50.10   │
-                         │ ATTACK-LAN    │
-                         └───────┬───────┘
-                                 │
-                                 ▼
-                         ┌───────────────┐
-                         │   OPNsense    │
-                         │   Firewall    │
-                         └───────┬───────┘
-                                 │
-                         LAB-LAN 10.10.20.0/24
-                                 │
-             ┌───────────────────┼───────────────────┐
-             │                   │                   │
-             ▼                   ▼                   ▼
-        ┌─────────┐       ┌──────────────┐     ┌────────────┐
-        │  DC01   │       │ CLT-WIN11-01 │     │   Wazuh    │
-        │ .20.10  │       │   .20.120    │     │  .20.110   │
-        │   AD    │       │  Windows 11  │     │   Ubuntu   │
-        └─────────┘       └──────────────┘     └────────────┘
+                    CyberHomeLab
+                         │
+                         ▼
+              ┌─────────────────────┐
+              │ 01 — Virtual Network│
+              │                     │
+              │ OPNsense / Firewall │
+              │ Segmentation / NAT  │
+              │ Routing / DNS / DHCP│
+              └──────────┬──────────┘
+                         │
+                         ▼
+              ┌─────────────────────┐
+              │ 02 — Active         │
+              │ Directory PAM Lab   │
+              │                     │
+              │ AD / Users / Groups │
+              │ GPO / Privileged    │
+              │ Access              │
+              └──────────┬──────────┘
+                         │
+                         ▼
+              ┌─────────────────────┐
+              │ 03 — Wazuh SOC Lab  │
+              │                     │
+              │ Telemetry / Alerts  │
+              │ Detection /         │
+              │ Investigation       │
+              └─────────────────────┘
 ```
 
 ---
 
-# How the Projects Connect
+## Current Environment
 
-The projects form a single security environment.
+```text
+ATTACK-LAN
+10.10.50.0/24
+        │
+        │
+     OPNsense
+        │
+        ▼
+LAB-LAN
+10.10.20.0/24
+        │
+        ├── DC01
+        │   10.10.20.10
+        │
+        ├── CLT-WIN11-01
+        │   10.10.20.120
+        │
+        └── Wazuh
+            10.10.20.110
+```
 
-### Network Layer
+The environment is intentionally segmented so that network access, identity, and security monitoring can be tested in a controlled virtual lab.
 
-**01 - Virtual Network**
+---
 
-Provides:
+## Overall Architecture
+
+The lab is built in layers:
 
 ```text
 Network
-Segmentation
-Firewall
-Routing
-Traffic Control
-```
-
-↓
-
-### Identity Layer
-
-**02 - Active Directory PAM Lab**
-
-Provides:
-
-```text
-Users
-Groups
-Authentication
-Authorization
-Privileged Accounts
-Windows Domain
-```
-
-↓
-
-### Security Monitoring Layer
-
-**03 - Wazuh SOC Lab**
-
-Provides:
-
-```text
-Telemetry
-Monitoring
-Detection
-Alerting
-Investigation
-Incident Response
-```
-
----
-
-# Security Workflow
-
-The overall lab is designed to support the following defensive workflow:
-
-```text
-Activity
    ↓
-Windows / Network Event
+Identity & Access
    ↓
-Wazuh Collection
+Security Monitoring
    ↓
-Detection
-   ↓
-Alert
-   ↓
-SOC Triage
-   ↓
-Investigation
-   ↓
-Incident Response
-   ↓
-Detection Improvement
-```
-
-The objective is to understand how security events move through the environment and how a SOC analyst can investigate them.
-
----
-
-# Current Status
-
-| Project                       | Status         |
-| ----------------------------- | -------------- |
-| 01 - Virtual Network          | ✅ Completed    |
-| 02 - Active Directory PAM Lab | ✅ Completed    |
-| 03 - Wazuh SOC Lab            | 🚧 In Progress |
-| 04 - Adversary Simulation Lab | 🔜 Planned     |
-
----
-
-# Future Expansion
-
-After completing the defensive side of the CyberHomeLab, a separate project will be developed for the attacker perspective:
-
-## 04 - Adversary Simulation Lab
-
-The future project will focus on controlled offensive-security scenarios and attack-path development.
-
-The purpose will be to simulate attacker behavior against the existing CyberHomeLab environment and provide a complementary perspective to the defensive SOC project.
-
-```text
-Adversary Simulation
-        ↓
-CyberHomeLab Infrastructure
-        ↓
-Security Telemetry
-        ↓
-Wazuh SOC
-        ↓
 Detection & Investigation
 ```
 
-This keeps the offensive and defensive work separated into dedicated projects while allowing them to interact through the same lab environment.
+Each project is independently documented while remaining part of the same overall environment.
 
 ---
 
-# Overall Goal
+## Status
 
-The long-term goal of CyberHomeLab is to build a practical cybersecurity environment that combines:
+| Project                       | Status         |
+| ----------------------------- | -------------- |
+| 01 — Virtual Network          | ✅ Completed    |
+| 02 — Active Directory PAM Lab | ✅ Completed    |
+| 03 — Wazuh SOC Lab            | 🚧 In Progress |
+| 04 — Adversary Simulation Lab | 🔜 Future      |
 
-* Network Security
-* Active Directory
-* Identity & Access Management
-* Privileged Access Management
-* Security Monitoring
-* Detection
-* SOC Investigation
-* Incident Response
-* Adversary Simulation
+---
 
-The lab is built incrementally, with each project extending the capabilities of the previous one.
+## Future Expansion
+
+Once the defensive side of the lab is completed, the environment will be extended with a separate **Adversary Simulation Lab**.
+
+This future project will focus on the attacker perspective and controlled offensive-security scenarios against the existing infrastructure.
+
+The long-term objective is to connect both perspectives:
+
+```text
+Adversary Simulation
+        │
+        ▼
+CyberHomeLab Infrastructure
+        │
+        ▼
+Security Telemetry
+        │
+        ▼
+Wazuh SOC
+        │
+        ▼
+Detection & Investigation
+```
