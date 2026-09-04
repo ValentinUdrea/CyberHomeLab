@@ -129,10 +129,10 @@ Each project is independently documented while remaining part of the same overal
 
 | Project                       | Status         |
 | ----------------------------- | -------------- |
-| 01 — Virtual Network          | ✅ Completed    |
-| 02 — Active Directory PAM Lab | ✅ Completed    |
-| 03 — Wazuh SOC Lab            | 🚧 In Progress |
-| 04 — Adversary Simulation Lab | 🔜 Future      |
+| 01 — Virtual Network          |  Completed    |
+| 02 — Active Directory PAM Lab |  Completed    |
+| 03 — Wazuh SOC Lab            | Completed |
+| 04 — Adversary Simulation Lab |  Future      |
 
 ---
 
